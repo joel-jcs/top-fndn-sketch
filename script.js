@@ -12,5 +12,8 @@ for (let i = 0; i < gridSize; i++) {
 
 const squares = document.querySelectorAll('.square');
 squares.forEach(square => {
-    square.style.flexBasis = `calc( 100% / ${squareSize})`;    
+    square.style.flexBasis = `calc( 100% / ${squareSize})`;
+    square.addEventListener('mouseenter', () => {
+        square.style.backgroundColor = 'black';
+    })
 });
