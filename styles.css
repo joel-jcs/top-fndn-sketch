@@ -1,0 +1,31 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    /* background-color: black; */
+    display:flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height:100vh;
+    width:100vw;
+}
+
+#container {
+    border: solid 1px black;
+    height:500px;
+    width:900px;
+    display:grid;
+    grid-template-columns: 1fr 2fr;
+}
+
+#options {
+    border: solid 1px red;
+}
+
+#sketch-container {
+    border: solid 1px blue;
+}
