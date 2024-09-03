@@ -13,11 +13,15 @@ const setGrid = () => {
     const squares = document.querySelectorAll('.square');
     squares.forEach(square => {
         square.style.flexBasis = `calc( 100% / ${squareSize})`;
-        square.addEventListener('mouseenter', () => {
+
+        let opacity = 0.1
+        square.addEventListener('mouseenter', event => {
             let randomRed = Math.floor(Math.random() * 256);
             let randomGreen = Math.floor(Math.random() * 256);
             let randomBlue = Math.floor(Math.random() * 256);
-            square.style.backgroundColor = `rgba(${randomRed},${randomGreen},${randomBlue}, 1)`;
+
+            square.style.backgroundColor = `rgba(${randomRed},${randomGreen},${randomBlue}, ${opacity})`;
+            opacity = Math.min(Number((opacity + 0.1).toFixed(1)), 1);
         });
     });
 }
