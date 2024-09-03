@@ -1,32 +1,58 @@
 const sketchpad = document.getElementById('sketch-container');
 const gridSizeBtn = document.getElementById('grid-size-btn');
+const rainbowBtn = document.getElementById('rainbow-btn')
 
+let squares;
 let squareSize = 16;
 let gridSize = squareSize * squareSize;
 
-const setGrid = () => {
-
+const createGrid = () => {
     for (let i = 0; i < gridSize; i++) {
         sketchpad.innerHTML += '<div class="square"></div>';
     }
     
-    const squares = document.querySelectorAll('.square');
+    squares = document.querySelectorAll('.square');
     squares.forEach(square => {
         square.style.flexBasis = `calc( 100% / ${squareSize})`;
-
-        let opacity = 0.1
-        square.addEventListener('mouseenter', event => {
-            let randomRed = Math.floor(Math.random() * 256);
-            let randomGreen = Math.floor(Math.random() * 256);
-            let randomBlue = Math.floor(Math.random() * 256);
-
-            square.style.backgroundColor = `rgba(${randomRed},${randomGreen},${randomBlue}, ${opacity})`;
-            opacity = Math.min(Number((opacity + 0.1).toFixed(1)), 1);
-        });
     });
 }
 
-setGrid();
+createGrid();
+
+let RGBA = [0, 0, 0];
+let pixelColor = ``;
+let isMouseDown = false;
+let rainbowMode = false;
+
+squares.forEach(square => {
+    let opacity = 0.1;
+
+    square.addEventListener('mousedown', () => {
+        isMouseDown = true;
+    });
+
+    square.addEventListener('mouseup', event => {
+        isMouseDown = false;
+    });
+
+    square.addEventListener('mouseenter', event => {
+        if (isMouseDown) {
+            pixelColor = `rgba(0,0,0,${opacity})`;
+            
+            let RGBA_COPY = RGBA.map(index => index = Math.floor(Math.random() * 256));
+            if (rainbowMode) {
+                RGBA = RGBA_COPY.slice();
+                pixelColor = `rgba(${RGBA[0]},${RGBA[1]},${RGBA[2]}, ${opacity})`;
+            } else {
+                pixelColor = `rgba(0,0,0,${opacity})`;
+            }
+
+            square.style.backgroundColor = `${pixelColor}`;
+            opacity = Math.min(Number((opacity + 0.1).toFixed(1)), 1);
+        }
+    })
+});
+
 
 gridSizeBtn.addEventListener('click', () => {
     const selection = prompt("Select a new grid size by typing a number from 1 to 100:");
@@ -38,4 +64,9 @@ gridSizeBtn.addEventListener('click', () => {
         gridSize = squareSize * squareSize;
         setGrid();
     }
+});
+
+rainbowBtn.addEventListener('click', () => {
+    rainbowMode = !rainbowMode;
+    console.log(rainbowMode);
 });
