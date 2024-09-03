@@ -4,9 +4,10 @@ const gridSizeSpan = document.getElementById('grid-size-span');
 const colorPicker = document.getElementById('color-picker');
 const colorBtn = document.getElementById('color-btn');
 const rainbowBtn = document.getElementById('rainbow-btn');
+const shaderBtn = document.getElementById('shader-btn');
+const lightenBtn = document.getElementById('lighten-btn');
 const eraseBtn = document.getElementById('erase-btn');
 const clearBtn = document.getElementById('clear-btn');
-
 
 let squares;
 let squareSize = 16;
@@ -25,12 +26,13 @@ const setGrid = () => {
 setGrid();
     
 let randomRgb = [0, 0, 0];
-let pickerRgba = {};
-pickerRgba = tinycolor(colorPicker.value).toRgb();
-let pixelColor = `rgba(${pickerRgba.r},${pickerRgba.g},${pickerRgba.b},0.1)`;;
+let pickerRgba = tinycolor(colorPicker.value).toRgb();
+let pixelColor = `rgba(${pickerRgba.r},${pickerRgba.g},${pickerRgba.b},0.1)`;
 
 let isMouseDown = false;
 let drawMode = "color";
+let opacityMode = "regular";
+let shaderToggle = false;
 // to-do: draw function currently only draws if clicking while dragging over mouse, doesn't draw when clicking while mouse is still
 const draw = () => {
     squares.forEach(square => {
@@ -46,7 +48,11 @@ const draw = () => {
     
         square.addEventListener('mouseenter', event => {
             if (isMouseDown) {
-                opacity = Math.min(Number((opacity + 0.1).toFixed(1)), 1);
+                if (opacityMode === "shader" && shaderToggle) {
+                    opacity = Math.min(Number((opacity + 0.1).toFixed(1)), 1);
+                } else {
+                    opacity = 1;
+                }
                 
                 let randomRgbCopy = randomRgb.map(index => index = Math.floor(Math.random() * 256));
                 if (drawMode === "rainbow") {
@@ -90,6 +96,11 @@ colorBtn.addEventListener('click', () => {
 
 rainbowBtn.addEventListener('click', () => {
     drawMode = "rainbow";
+});
+
+shaderBtn.addEventListener('click', () => {
+    opacityMode = "shader";
+    shaderToggle = !shaderToggle;
 });
 
 eraseBtn.addEventListener('click', () => {

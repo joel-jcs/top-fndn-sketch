@@ -32,9 +32,8 @@ body {
 }
 
 .button {
-    height:60px;
+    height:40px;
     width:100px;
-    font-size: 1.3rem;
     border-radius: 10px;
 }
 
