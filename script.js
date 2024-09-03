@@ -33,6 +33,7 @@ let isMouseDown = false;
 let drawMode = "color";
 let opacityMode = "regular";
 let shaderToggle = false;
+let lightenToggle = false;
 // to-do: draw function currently only draws if clicking while dragging over mouse, doesn't draw when clicking while mouse is still
 const draw = () => {
     squares.forEach(square => {
@@ -50,6 +51,8 @@ const draw = () => {
             if (isMouseDown) {
                 if (opacityMode === "shader" && shaderToggle) {
                     opacity = Math.min(Number((opacity + 0.1).toFixed(1)), 1);
+                } else if (opacityMode === "lighten" && lightenToggle) {
+                    opacity = Math.min(Number((opacity - 0.1).toFixed(1)), 1);
                 } else {
                     opacity = 1;
                 }
@@ -86,25 +89,27 @@ gridSizeSlider.addEventListener('input', () => {
 });
 
 
-colorPicker.addEventListener('input', () => {
-    pickerRgba = tinycolor(colorPicker.value).toRgb();
-})
+colorPicker.addEventListener('input', () => pickerRgba = tinycolor(colorPicker.value).toRgb());
+colorBtn.addEventListener('click', () => drawMode = "color");
+rainbowBtn.addEventListener('click', () => drawMode = "rainbow");
 
-colorBtn.addEventListener('click', () => {
-    drawMode = "color";
-});
-
-rainbowBtn.addEventListener('click', () => {
-    drawMode = "rainbow";
+eraseBtn.addEventListener('click', () => {
+    drawMode = "erase";
+    opacityMode = "regular";
+    shaderToggle = false;
+    lightenToggle = false;
 });
 
 shaderBtn.addEventListener('click', () => {
     opacityMode = "shader";
     shaderToggle = !shaderToggle;
+    lightenToggle = false;
 });
 
-eraseBtn.addEventListener('click', () => {
-    drawMode = "erase";
+lightenBtn.addEventListener('click', () => {
+    opacityMode = "lighten";
+    lightenToggle = !lightenToggle;
+    shaderToggle = false;
 });
 
 clearBtn.addEventListener('click', () => {
