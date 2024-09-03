@@ -1,7 +1,8 @@
 const sketchpad = document.getElementById('sketch-container');
 const gridSizeSlider = document.getElementById('grid-size-slider');
 const gridSizeSpan = document.getElementById('grid-size-span');
-const colorBtn = document.getElementById('color-btn')
+const colorPicker = document.getElementById('color-picker');
+const colorBtn = document.getElementById('color-btn');
 const rainbowBtn = document.getElementById('rainbow-btn');
 const eraseBtn = document.getElementById('erase-btn');
 const clearBtn = document.getElementById('clear-btn');
@@ -10,7 +11,6 @@ const clearBtn = document.getElementById('clear-btn');
 let squares;
 let squareSize = 16;
 let gridSize = squareSize * squareSize;
-
 const setGrid = () => {
     for (let i = 0; i < gridSize; i++) {
         sketchpad.innerHTML += '<div class="square"></div>';
@@ -24,11 +24,13 @@ const setGrid = () => {
 
 setGrid();
     
-let RGBA = [0, 0, 0];
-let pixelColor = ``;
+let randomRgb = [0, 0, 0];
+let pickerRgba = {};
+pickerRgba = tinycolor(colorPicker.value).toRgb();
+let pixelColor = `rgba(${pickerRgba.r},${pickerRgba.g},${pickerRgba.b},0.1)`;;
+
 let isMouseDown = false;
 let drawMode = "color";
-
 // to-do: draw function currently only draws if clicking while dragging over mouse, doesn't draw when clicking while mouse is still
 const draw = () => {
     squares.forEach(square => {
@@ -45,17 +47,16 @@ const draw = () => {
         square.addEventListener('mouseenter', event => {
             if (isMouseDown) {
                 opacity = Math.min(Number((opacity + 0.1).toFixed(1)), 1);
-                pixelColor = `rgba(0,0,0,${opacity})`;
                 
-                let RGBA_COPY = RGBA.map(index => index = Math.floor(Math.random() * 256));
+                let randomRgbCopy = randomRgb.map(index => index = Math.floor(Math.random() * 256));
                 if (drawMode === "rainbow") {
-                    RGBA = RGBA_COPY.slice();
-                    pixelColor = `rgba(${RGBA[0]},${RGBA[1]},${RGBA[2]}, ${opacity})`;
+                    randomRgb = randomRgbCopy.slice();
+                    pixelColor = `rgba(${randomRgb[0]},${randomRgb[1]},${randomRgb[2]}, ${opacity})`;
                 } else if (drawMode === "erase") {
                     opacity = 0;
                     pixelColor = `rgba(0,0,0,${opacity})`;
                 } else {
-                    pixelColor = `rgba(0,0,0,${opacity})`;
+                    pixelColor = `rgba(${pickerRgba.r},${pickerRgba.g},${pickerRgba.b},${opacity})`;
                 }
     
                 square.style.backgroundColor = `${pixelColor}`;
@@ -78,6 +79,11 @@ gridSizeSlider.addEventListener('input', () => {
     draw();
 });
 
+
+colorPicker.addEventListener('input', () => {
+    pickerRgba = tinycolor(colorPicker.value).toRgb();
+})
+
 colorBtn.addEventListener('click', () => {
     drawMode = "color";
 });
@@ -91,8 +97,6 @@ eraseBtn.addEventListener('click', () => {
 });
 
 clearBtn.addEventListener('click', () => {
-    squares.forEach(square => {
-        square.style.backgroundColor = `rgba(0,0,0,0)`;
-    });
+    squares.forEach(square => square.style.backgroundColor = `rgba(0,0,0,0)`);
     draw();
 });
