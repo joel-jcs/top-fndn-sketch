@@ -14,7 +14,10 @@ const setGrid = () => {
     squares.forEach(square => {
         square.style.flexBasis = `calc( 100% / ${squareSize})`;
         square.addEventListener('mouseenter', () => {
-            square.style.backgroundColor = 'black';
+            let randomRed = Math.floor(Math.random() * 256);
+            let randomGreen = Math.floor(Math.random() * 256);
+            let randomBlue = Math.floor(Math.random() * 256);
+            square.style.backgroundColor = `rgba(${randomRed},${randomGreen},${randomBlue}, 1)`;
         });
     });
 }
