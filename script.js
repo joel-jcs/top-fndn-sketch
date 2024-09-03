@@ -92,7 +92,7 @@ draw();
 
 gridSizeSlider.addEventListener('input', () => {
     let selection = gridSizeSlider.value;
-    gridSizeSpan.textContent = `${selection} x ${selection}`
+    gridSizeSpan.textContent = `${selection} x ${selection}`;
     sketchpad.innerHTML = ``;
     squareSize = selection;
     gridSize = squareSize * squareSize;
@@ -108,25 +108,45 @@ gridToggleBtn.addEventListener('click', () => {
 
 colorPicker.addEventListener('input', () => pickerRgba = tinycolor(colorPicker.value).toRgb());
 colorBtn.addEventListener('click', () => drawMode = "color");
-rainbowBtn.addEventListener('click', () => drawMode = "rainbow");
+
+rainbowBtn.addEventListener('click', () => {
+    drawMode = "rainbow";
+});
 
 eraseBtn.addEventListener('click', () => {
     drawMode = "erase";
     opacityMode = "regular";
     isShaderToggled = false;
     isLightenToggled = false;
+
+    shaderToggleBtn.classList.remove('active');
+    lightenToggleBtn.classList.remove('active');
 });
+
+
+const toggleClass = (element, className) => {
+    if (element.classList.contains(className)) {
+        element.classList.remove(className);
+    } else {
+        element.classList.add(className);
+    }
+}
 
 shaderToggleBtn.addEventListener('click', () => {
     opacityMode = "shader";
     isShaderToggled = !isShaderToggled;
     isLightenToggled = false;
+    toggleClass(shaderToggleBtn, 'active');
+    lightenToggleBtn.classList.remove('active');
 });
 
 lightenToggleBtn.addEventListener('click', () => {
     opacityMode = "lighten";
     isLightenToggled = !isLightenToggled;
     isShaderToggled = false;
+
+    toggleClass(lightenToggleBtn, 'active');
+    shaderToggleBtn.classList.remove('active');
 });
 
 clearBtn.addEventListener('click', () => {
