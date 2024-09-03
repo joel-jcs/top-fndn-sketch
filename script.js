@@ -23,7 +23,7 @@ const setGrid = () => {
     squares.forEach(square => {
         square.style.flexBasis = `calc( 100% / ${squareSize})`;
         if (isGridToggled) {
-            square.style.border = "solid 1px black";
+            square.style.border = "solid 1px rgba(0, 0, 0, 0.2)";
         } else {
             square.style.border = "";
         }
@@ -41,43 +41,39 @@ let drawMode = "color";
 let opacityMode = "regular";
 let isShaderToggled = false;
 let isLightenToggled = false;
-// to-do: draw function currently only draws if clicking while dragging over mouse, doesn't draw when clicking while mouse is still
 const draw = () => {
     squares.forEach(square => {
         let opacity = 0;
-    
-        square.addEventListener('mousedown', () => {
-            isMouseDown = true;
-        });
-    
-        square.addEventListener('mouseup', event => {
-            isMouseDown = false;
-        });
-    
-        square.addEventListener('mouseenter', event => {
+        
+        const updateSquare = () => {
+            if (opacityMode === "shader" && isShaderToggled) {
+                opacity = Math.min(Number((opacity + 0.1).toFixed(1)), 1);
+            } else if (opacityMode === "lighten" && isLightenToggled) {
+                opacity = Math.min(Number((opacity - 0.1).toFixed(1)), 1);
+            } else {
+                opacity = 1;
+            }
+            
+            let randomRgbCopy = randomRgb.map(index => index = Math.floor(Math.random() * 256));
+            if (drawMode === "rainbow") {
+                randomRgb = randomRgbCopy.slice();
+                pixelColor = `rgba(${randomRgb[0]},${randomRgb[1]},${randomRgb[2]}, ${opacity})`;
+            } else if (drawMode === "erase") {
+                opacity = 0;
+                pixelColor = `rgba(0,0,0,${opacity})`;
+            } else {
+                pixelColor = `rgba(${pickerRgba.r},${pickerRgba.g},${pickerRgba.b},${opacity})`;
+            }
+
+            square.style.backgroundColor = `${pixelColor}`;
+        }
+
+        square.addEventListener('click', updateSquare);
+        square.addEventListener('mousedown', () => isMouseDown = true);
+        square.addEventListener('mouseup', () => isMouseDown = false);
+        square.addEventListener('mouseenter', () => {
             if (isMouseDown) {
-                if (opacityMode === "shader" && isShaderToggled) {
-                    opacity = Math.min(Number((opacity + 0.1).toFixed(1)), 1);
-                } else if (opacityMode === "lighten" && isLightenToggled) {
-                    opacity = Math.min(Number((opacity - 0.1).toFixed(1)), 1);
-                } else {
-                    opacity = 1;
-                }
-                
-                let randomRgbCopy = randomRgb.map(index => index = Math.floor(Math.random() * 256));
-                if (drawMode === "rainbow") {
-                    randomRgb = randomRgbCopy.slice();
-                    pixelColor = `rgba(${randomRgb[0]},${randomRgb[1]},${randomRgb[2]}, ${opacity})`;
-                } else if (drawMode === "erase") {
-                    opacity = 0;
-                    pixelColor = `rgba(0,0,0,${opacity})`;
-                } else {
-                    pixelColor = `rgba(${pickerRgba.r},${pickerRgba.g},${pickerRgba.b},${opacity})`;
-                }
-    
-                square.style.backgroundColor = `${pixelColor}`;
-                
-                console.log(pixelColor);
+                updateSquare();
             }
         })
     });
@@ -100,7 +96,7 @@ gridToggleBtn.addEventListener('click', () => {
     
     squares.forEach(square => {
         if (isGridToggled) {
-            square.style.border = "solid 1px black";
+            square.style.border = "solid 1px rgba(0, 0, 0, 0.2)";
         } else {
             square.style.border = "";
         }
