@@ -100,8 +100,18 @@ gridSizeSlider.addEventListener('input', () => {
     draw();
 });
 
+const toggleClass = (element, className) => {
+    if (element.classList.contains(className)) {
+        element.classList.remove(className);
+    } else {
+        element.classList.add(className);
+    }
+}
+toggleClass(gridToggleBtn, 'active');
+
 gridToggleBtn.addEventListener('click', () => {
     isGridToggled = !isGridToggled;
+    toggleClass(gridToggleBtn, 'active');
     gridToggledCheck();
 });
 
@@ -122,15 +132,6 @@ eraseBtn.addEventListener('click', () => {
     shaderToggleBtn.classList.remove('active');
     lightenToggleBtn.classList.remove('active');
 });
-
-
-const toggleClass = (element, className) => {
-    if (element.classList.contains(className)) {
-        element.classList.remove(className);
-    } else {
-        element.classList.add(className);
-    }
-}
 
 shaderToggleBtn.addEventListener('click', () => {
     opacityMode = "shader";
