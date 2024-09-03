@@ -57,7 +57,7 @@ h1 {
     gap:30px;
 }
 
-#options-container {
+#settings-container {
     display:flex;
     flex-direction: column;
     align-items: center;
@@ -65,15 +65,21 @@ h1 {
     gap:10px;
     background-color: rgb(230, 230, 230);
     border-radius: 10px;
+    padding:10px;
+}
+
+#grid-size-slider {
+    accent-color: rgb(89, 89, 88);
 }
 
 .button {
     height:40px;
-    width:100px;
+    width:90px;
     border-radius: 10px;
     border: none;
     background: rgb(198, 198, 198);
     transition:ease 0.1s;
+    margin-bottom:10px;
 }
 
 .button:hover {
@@ -95,7 +101,7 @@ h1 {
 
 #color-picker {
     height:60px;
-    width: 100px;
+    width: 90px;
     border:none;
 }
 
@@ -106,6 +112,20 @@ h1 {
 
 #color-picker:active {
     transform: scale(1.05);
+}
+
+#mode-container {
+    display:flex;
+    flex-direction: row;
+    align-items:end;
+    gap:5px;
+    margin-bottom:10px;
+}
+
+#shade-container {
+    display:flex;
+    gap:10px;
+    margin-bottom:5px;
 }
 
 .active {
