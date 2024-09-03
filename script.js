@@ -107,7 +107,9 @@ const toggleClass = (element, className) => {
         element.classList.add(className);
     }
 }
+
 toggleClass(gridToggleBtn, 'active');
+toggleClass(colorBtn, 'active');
 
 gridToggleBtn.addEventListener('click', () => {
     isGridToggled = !isGridToggled;
@@ -118,10 +120,7 @@ gridToggleBtn.addEventListener('click', () => {
 
 colorPicker.addEventListener('input', () => pickerRgba = tinycolor(colorPicker.value).toRgb());
 colorBtn.addEventListener('click', () => drawMode = "color");
-
-rainbowBtn.addEventListener('click', () => {
-    drawMode = "rainbow";
-});
+rainbowBtn.addEventListener('click', () => drawMode = "rainbow");
 
 eraseBtn.addEventListener('click', () => {
     drawMode = "erase";
@@ -131,6 +130,14 @@ eraseBtn.addEventListener('click', () => {
 
     shaderToggleBtn.classList.remove('active');
     lightenToggleBtn.classList.remove('active');
+});
+
+const buttons = document.querySelectorAll(".select");
+buttons.forEach(button => {
+    button.addEventListener('click', () => {
+        buttons.forEach(b => b.classList.remove('active'));
+        button.classList.add('active');
+    })
 });
 
 shaderToggleBtn.addEventListener('click', () => {
