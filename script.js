@@ -14,20 +14,25 @@ let squares;
 let squareSize = 16;
 let gridSize = squareSize * squareSize;
 let isGridToggled = true;
-const setGrid = () => {
-    for (let i = 0; i < gridSize; i++) {
-        sketchpad.innerHTML += '<div class="square"></div>';
-    }
-    
-    squares = document.querySelectorAll('.square');
+
+const gridToggledCheck = () => {
     squares.forEach(square => {
-        square.style.flexBasis = `calc( 100% / ${squareSize})`;
         if (isGridToggled) {
             square.style.border = "solid 1px rgba(0, 0, 0, 0.2)";
         } else {
             square.style.border = "";
         }
     });
+}
+
+const setGrid = () => {
+    for (let i = 0; i < gridSize; i++) {
+        sketchpad.innerHTML += '<div class="square"></div>';
+    }
+    
+    squares = document.querySelectorAll('.square');
+    squares.forEach(square => square.style.flexBasis = `calc( 100% / ${squareSize})`);
+    gridToggledCheck();
 }
 
 setGrid();
@@ -93,14 +98,7 @@ gridSizeSlider.addEventListener('input', () => {
 
 gridToggleBtn.addEventListener('click', () => {
     isGridToggled = !isGridToggled;
-    
-    squares.forEach(square => {
-        if (isGridToggled) {
-            square.style.border = "solid 1px rgba(0, 0, 0, 0.2)";
-        } else {
-            square.style.border = "";
-        }
-    });
+    gridToggledCheck();
 });
 
 
