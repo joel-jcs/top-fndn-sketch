@@ -1,17 +1,19 @@
 const sketchpad = document.getElementById('sketch-container');
-const gridSizeSlider = document.getElementById('grid-size-slider');
 const gridSizeSpan = document.getElementById('grid-size-span');
+const gridSizeSlider = document.getElementById('grid-size-slider');
+const gridToggleBtn = document.getElementById('grid-toggle-btn')
 const colorPicker = document.getElementById('color-picker');
 const colorBtn = document.getElementById('color-btn');
 const rainbowBtn = document.getElementById('rainbow-btn');
-const shaderBtn = document.getElementById('shader-btn');
-const lightenBtn = document.getElementById('lighten-btn');
+const shaderToggleBtn = document.getElementById('shader-toggle-btn');
+const lightenToggleBtn = document.getElementById('lighten-toggle-btn');
 const eraseBtn = document.getElementById('erase-btn');
 const clearBtn = document.getElementById('clear-btn');
 
 let squares;
 let squareSize = 16;
 let gridSize = squareSize * squareSize;
+let isGridToggled = true;
 const setGrid = () => {
     for (let i = 0; i < gridSize; i++) {
         sketchpad.innerHTML += '<div class="square"></div>';
@@ -20,6 +22,11 @@ const setGrid = () => {
     squares = document.querySelectorAll('.square');
     squares.forEach(square => {
         square.style.flexBasis = `calc( 100% / ${squareSize})`;
+        if (isGridToggled) {
+            square.style.border = "solid 1px black";
+        } else {
+            square.style.border = "";
+        }
     });
 }
 
@@ -32,8 +39,8 @@ let pixelColor = `rgba(${pickerRgba.r},${pickerRgba.g},${pickerRgba.b},0.1)`;
 let isMouseDown = false;
 let drawMode = "color";
 let opacityMode = "regular";
-let shaderToggle = false;
-let lightenToggle = false;
+let isShaderToggled = false;
+let isLightenToggled = false;
 // to-do: draw function currently only draws if clicking while dragging over mouse, doesn't draw when clicking while mouse is still
 const draw = () => {
     squares.forEach(square => {
@@ -49,9 +56,9 @@ const draw = () => {
     
         square.addEventListener('mouseenter', event => {
             if (isMouseDown) {
-                if (opacityMode === "shader" && shaderToggle) {
+                if (opacityMode === "shader" && isShaderToggled) {
                     opacity = Math.min(Number((opacity + 0.1).toFixed(1)), 1);
-                } else if (opacityMode === "lighten" && lightenToggle) {
+                } else if (opacityMode === "lighten" && isLightenToggled) {
                     opacity = Math.min(Number((opacity - 0.1).toFixed(1)), 1);
                 } else {
                     opacity = 1;
@@ -88,6 +95,18 @@ gridSizeSlider.addEventListener('input', () => {
     draw();
 });
 
+gridToggleBtn.addEventListener('click', () => {
+    isGridToggled = !isGridToggled;
+    
+    squares.forEach(square => {
+        if (isGridToggled) {
+            square.style.border = "solid 1px black";
+        } else {
+            square.style.border = "";
+        }
+    });
+});
+
 
 colorPicker.addEventListener('input', () => pickerRgba = tinycolor(colorPicker.value).toRgb());
 colorBtn.addEventListener('click', () => drawMode = "color");
@@ -96,20 +115,20 @@ rainbowBtn.addEventListener('click', () => drawMode = "rainbow");
 eraseBtn.addEventListener('click', () => {
     drawMode = "erase";
     opacityMode = "regular";
-    shaderToggle = false;
-    lightenToggle = false;
+    isShaderToggled = false;
+    isLightenToggled = false;
 });
 
-shaderBtn.addEventListener('click', () => {
+shaderToggleBtn.addEventListener('click', () => {
     opacityMode = "shader";
-    shaderToggle = !shaderToggle;
-    lightenToggle = false;
+    isShaderToggled = !isShaderToggled;
+    isLightenToggled = false;
 });
 
-lightenBtn.addEventListener('click', () => {
+lightenToggleBtn.addEventListener('click', () => {
     opacityMode = "lighten";
-    lightenToggle = !lightenToggle;
-    shaderToggle = false;
+    isLightenToggled = !isLightenToggled;
+    isShaderToggled = false;
 });
 
 clearBtn.addEventListener('click', () => {
