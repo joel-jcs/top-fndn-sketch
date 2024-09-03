@@ -31,22 +31,24 @@ const setGrid = () => {
     }
     
     squares = document.querySelectorAll('.square');
-    squares.forEach(square => square.style.flexBasis = `calc( 100% / ${squareSize})`);
+    squares.forEach(square => {
+        square.style.flexBasis = `calc( 100% / ${squareSize})`;
+    });
     gridToggledCheck();
 }
 
 setGrid();
     
-let randomRgb = [0, 0, 0];
 let pickerRgba = tinycolor(colorPicker.value).toRgb();
 let pixelColor = `rgba(${pickerRgba.r},${pickerRgba.g},${pickerRgba.b},0.1)`;
 
-let isMouseDown = false;
 let drawMode = "color";
 let opacityMode = "regular";
 let isShaderToggled = false;
 let isLightenToggled = false;
 const draw = () => {
+    let randomRgb = [0, 0, 0];
+    let isMouseDown = false;
     squares.forEach(square => {
         let opacity = 0;
         
@@ -54,7 +56,7 @@ const draw = () => {
             if (opacityMode === "shader" && isShaderToggled) {
                 opacity = Math.min(Number((opacity + 0.1).toFixed(1)), 1);
             } else if (opacityMode === "lighten" && isLightenToggled) {
-                opacity = Math.min(Number((opacity - 0.1).toFixed(1)), 1);
+                opacity = Math.max(Number((opacity - 0.1).toFixed(1)), 0);
             } else {
                 opacity = 1;
             }
@@ -73,14 +75,16 @@ const draw = () => {
             square.style.backgroundColor = `${pixelColor}`;
         }
 
-        square.addEventListener('click', updateSquare);
-        square.addEventListener('mousedown', () => isMouseDown = true);
+        square.addEventListener('mousedown', () => {
+            isMouseDown = true;
+            updateSquare();
+        });
         square.addEventListener('mouseup', () => isMouseDown = false);
         square.addEventListener('mouseenter', () => {
             if (isMouseDown) {
                 updateSquare();
-            }
-        })
+            };
+        });
     });
 }
 
