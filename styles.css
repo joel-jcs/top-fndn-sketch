@@ -43,3 +43,7 @@ body {
     flex-wrap: wrap;
 }
 
+.square {
+    user-select: none;
+}
+

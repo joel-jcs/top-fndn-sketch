@@ -73,7 +73,7 @@ const draw = () => {
             }
 
             square.style.backgroundColor = `${pixelColor}`;
-        }
+        };
 
         square.addEventListener('mousedown', () => {
             isMouseDown = true;
@@ -86,7 +86,7 @@ const draw = () => {
             };
         });
     });
-}
+};
 
 draw();
 
