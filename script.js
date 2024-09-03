@@ -69,7 +69,7 @@ const draw = () => {
 draw();
 
 gridSizeSlider.addEventListener('input', () => {
-    selection = gridSizeSlider.value;
+    let selection = gridSizeSlider.value;
     gridSizeSpan.textContent = `${selection} x ${selection}`
     sketchpad.innerHTML = ``;
     squareSize = selection;
@@ -92,6 +92,7 @@ eraseBtn.addEventListener('click', () => {
 
 clearBtn.addEventListener('click', () => {
     squares.forEach(square => {
-        
+        square.style.backgroundColor = `rgba(0,0,0,0)`;
     });
+    draw();
 });
