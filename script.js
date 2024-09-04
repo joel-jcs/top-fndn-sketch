@@ -1,7 +1,7 @@
 const sketchpad = document.getElementById('sketch-container');
 const gridSizeSpan = document.getElementById('grid-size-span');
 const gridSizeSlider = document.getElementById('grid-size-slider');
-const gridToggleBtn = document.getElementById('grid-toggle-btn')
+const gridToggleBtn = document.getElementById('grid-toggle-btn');
 const colorPicker = document.getElementById('color-picker');
 const colorBtn = document.getElementById('color-btn');
 const rainbowBtn = document.getElementById('rainbow-btn');
@@ -10,11 +10,12 @@ const lightenToggleBtn = document.getElementById('lighten-toggle-btn');
 const eraseBtn = document.getElementById('erase-btn');
 const clearBtn = document.getElementById('clear-btn');
 
-let squares;
+let squares; 
 let squareSize = 16;
-let gridSize = squareSize * squareSize;
-let isGridToggled = true;
+let gridSize = squareSize * squareSize; 
+let isGridToggled = true; 
 
+// Check and update grid visibility
 const gridToggledCheck = () => {
     squares.forEach(square => {
         if (isGridToggled) {
@@ -38,14 +39,15 @@ const setGrid = () => {
 }
 
 setGrid();
-    
+
 let pickerRgba = tinycolor(colorPicker.value).toRgb();
 let pixelColor = `rgba(${pickerRgba.r},${pickerRgba.g},${pickerRgba.b},0.1)`;
 
-let drawMode = "color";
+let drawMode = "color"; 
 let opacityMode = "regular";
 let isShaderToggled = false;
 let isLightenToggled = false;
+
 const draw = () => {
     let randomRgb = [0, 0, 0];
     let isMouseDown = false;
@@ -53,6 +55,7 @@ const draw = () => {
         let opacity = 0;
         
         const updateSquare = () => {
+            // Updating opacity if shader or lighten modes are active
             if (opacityMode === "shader" && isShaderToggled) {
                 opacity = Math.min(Number((opacity + 0.1).toFixed(1)), 1);
             } else if (opacityMode === "lighten" && isLightenToggled) {
@@ -61,6 +64,7 @@ const draw = () => {
                 opacity = 1;
             }
             
+            // Updating pixel color based on drawing mode
             let randomRgbCopy = randomRgb.map(index => index = Math.floor(Math.random() * 256));
             if (drawMode === "rainbow") {
                 randomRgb = randomRgbCopy.slice();
@@ -75,6 +79,7 @@ const draw = () => {
             square.style.backgroundColor = `${pixelColor}`;
         };
 
+        // drawing functionality
         square.addEventListener('mousedown', () => {
             isMouseDown = true;
             updateSquare();
@@ -100,6 +105,7 @@ gridSizeSlider.addEventListener('input', () => {
     draw();
 });
 
+// Function to add/remove a CSS class on an element. mainly used for shader and lighten toggles 
 const toggleClass = (element, className) => {
     if (element.classList.contains(className)) {
         element.classList.remove(className);
@@ -117,7 +123,6 @@ gridToggleBtn.addEventListener('click', () => {
     gridToggledCheck();
 });
 
-
 colorPicker.addEventListener('input', () => pickerRgba = tinycolor(colorPicker.value).toRgb());
 colorBtn.addEventListener('click', () => drawMode = "color");
 rainbowBtn.addEventListener('click', () => drawMode = "rainbow");
@@ -132,6 +137,7 @@ eraseBtn.addEventListener('click', () => {
     lightenToggleBtn.classList.remove('active');
 });
 
+// Event listeners for selecting drawing modes (rainbow, color, eraser)
 const buttons = document.querySelectorAll(".select");
 buttons.forEach(button => {
     button.addEventListener('click', () => {
